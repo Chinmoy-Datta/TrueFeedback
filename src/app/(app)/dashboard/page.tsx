@@ -20,6 +20,7 @@ function Page() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
+  const [profileUrl, setProfileUrl] = useState("");
 
   const handleDeleteMessage = (messageId: string) => {
     setMessages(
@@ -115,15 +116,16 @@ function Page() {
     }
   };
 
-  const user: User = session?.user as User;
-
-  const username = user?.username;
+useEffect(() => {
+  if (!session?.user) return;
+  const username = session.user.username;
+  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  setProfileUrl(`${baseUrl}/u/${username}`);
+}, [session]);
 
   //Todo: Do more research
 
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
-
-  const profileUrl = `${baseUrl}/u/${username}`;
+ 
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(profileUrl);
